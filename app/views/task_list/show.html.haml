@@ -1,0 +1,26 @@
+%h2 タスク一覧
+
+= link_to 'タスクを作成する', task_new_path
+
+%table
+  %tr
+    %th タスク名
+    %th ステータス
+    %th 担当者
+
+  - @tasks.each do |task|
+    - user = @users.find_by(developer_id: task.developer_id)
+    %tr
+      %td
+        %sapn= task.task_name
+      %td
+        - if changeable_status?(task.status)
+          = button_to "#{task.status}", task_status_update_path(id: task.id)
+        - else
+          %span= task.status
+      %td
+        %span= user.user_name if user.present?
+      %td
+        = button_to 'サブタスク作成', subtask_new_path
+      %td
+        = button_to '削除する', task_delete_path(id: task.id)
