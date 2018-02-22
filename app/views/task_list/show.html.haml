@@ -21,6 +21,6 @@
       %td
         %span= user.user_name if user.present?
       %td
-        = button_to 'サブタスク作成', subtask_new_path
+        = button_to 'サブタスク一覧', get_show_subtask_path(task.id)
       %td
         = button_to '削除する', task_delete_path(id: task.id)

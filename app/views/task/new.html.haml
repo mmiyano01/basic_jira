@@ -1,14 +1,5 @@
 %h2 新規タスク作成
 
-= form_for @form, url: {action: 'create'} do |f|
-  = f.hidden_field :status, value: 'todo'
-  = f.hidden_field :is_deleted, value: false
-
-  = f.label :task_name, 'タスク名'
-  = f.text_field :task_name
-  %br
-  = f.label :developer_id, '担当者'
-  = f.select :developer_id, @users.map{|t| [t.user_name, t.developer_id]}
-  = f.submit '作成する'
+= render partial: 'partials/new_input'
 
 = link_to '戻る', root_path

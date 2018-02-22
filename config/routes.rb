@@ -9,6 +9,12 @@ Rails.application.routes.draw do
   post 'task/create' => 'task#create'
   post 'task/status_update' => 'task#status_update'
   post 'task/delete' => 'task#delete'
+  get 'task_list/show_subtask/:id(.:format)' => 'task_list#show_subtask' , as: :get_show_subtask
+  post 'task_list/show_subtask/:id(.:format)' => 'task_list#show_subtask', as: :post_show_subtask
+  get 'subtask/new' => 'subtask#new'
+  post 'subtask/create' => 'subtask#create'
+  post 'subtask/status_update' => 'subtask#status_update'
+  post 'subtask/delete' => 'subtask#delete'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

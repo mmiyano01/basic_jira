@@ -7,6 +7,13 @@ class TaskListRepository
 		end
 	end
 
+	def find_active_subtasks(task_id)
+		subtasks = Subtask.where(task_id: task_id, is_deleted: false)
+		subtasks.each do |s|
+			SubtaskForm.new(s.task_name, s.status, s.is_deleted, s.developer_id)
+		end
+	end
+
 	def create(task)
 		task.save
 	end
