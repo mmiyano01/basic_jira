@@ -1,5 +1,5 @@
 module TaskListHelper
-  def changeable_status?(status)
-    status != 'done'
+  def unchangeable_status?(status, id_list = nil)
+    status == 'done' || id_list.present?
   end
 end

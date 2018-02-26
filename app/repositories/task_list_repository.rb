@@ -2,15 +2,20 @@ class TaskListRepository
 
 	def find_active_tasks
 		tasks = Task.where(is_deleted: false)
-		tasks.each do |t|
-			TaskForm.new(t.task_name, t.status, t.is_deleted, t.developer_id, subtask_id_list(t))
+		tasks.map do |t|
+			status = t.status
+			if subtask_all_done?(t.id)
+				status_update(t) unless t.status == 'done'
+				status = 'done'
+			end
+			TaskForm.new(t.id, t.task_name, status, t.is_deleted, t.developer_id, subtask_id_list(t.id))
 		end
 	end
 
 	def find_active_subtasks(task_id)
 		subtasks = Subtask.where(task_id: task_id, is_deleted: false)
-		subtasks.each do |s|
-			SubtaskForm.new(s.task_name, s.status, s.is_deleted, s.developer_id)
+		subtasks.map do |s|
+			SubtaskForm.new(s.id, s.task_name, s.status, s.is_deleted, s.developer_id)
 		end
 	end
 
@@ -52,8 +57,12 @@ class TaskListRepository
 
 	private
 
-	def subtask_id_list(task)
-		Subtask.where(task_id: task.id).map{|st| st.id}
+	def subtask_id_list(task_id)
+		Subtask.where(task_id: task_id, is_deleted: false).map{|st| st.id}
 	end
 
-end	
+	def subtask_all_done?(task_id)
+		subtasks = Subtask.where(task_id: task_id, is_deleted: false)
+		subtasks.map{|s| s.status == 'done'}.all? if subtasks.present?
+	end
+end
