@@ -6,19 +6,19 @@ class TaskController < ApplicationController
 
   def create
     task = params[:task_form]
-    TaskListRepository.new.create_task(task[:task_name], task[:status], task[:is_deleted], task[:developer_id])
+    TaskRepository.new.create(task[:task_name], task[:status], task[:is_deleted], task[:developer_id])
     redirect_to root_path
   end
 
   def status_update
     task = Task.find(params[:id])
-    TaskListRepository.new.status_update(task)
+    TaskRepository.new.status_update(task)
     redirect_to root_path
   end
 
   def delete
     task = Task.find(params[:id])
-    TaskListRepository.new.delete(task)
+    TaskRepository.new.delete(task)
     redirect_to root_path
   end
 

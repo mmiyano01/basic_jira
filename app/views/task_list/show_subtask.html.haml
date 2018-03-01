@@ -1,25 +1,26 @@
 %h2 #{@task_name}のサブタスク一覧
 
-= link_to 'サブタスクを作成する', subtask_new_path(task_id: @task_id)
+- unless @task_status == 'done'
+  = link_to 'サブタスクを作成する', subtask_new_path(task_id: @task_id)
 = link_to '戻る', root_path
-
-%table
-  %tr
-    %th サブタスク名
-    %th ステータス
-    %th 担当者
-
-  - @subtasks.each do |task|
-    - user = @users.find_by(developer_id: task.developer_id)
+- if @subtasks.present?
+  %table
     %tr
-      %td
-        %sapn= task.task_name
-      %td
-        - if unchangeable_status?(task.status)
-          %span= task.status
-        - else
-          = button_to "#{task.status}", subtask_status_update_path(subtask_id: task.id, task_id: @task_id)
-      %td
-        %span= user.user_name if user.present?
-      %td
-        = button_to '削除する', subtask_delete_path(subtask_id: task.id, task_id: @task_id)
+      %th サブタスク名
+      %th ステータス
+      %th 担当者
+
+    - @subtasks.each do |task|
+      - user = @users.find_by(developer_id: task.developer_id)
+      %tr
+        %td
+          %sapn= task.task_name
+        %td
+          - if unchangeable_status?(task.status)
+            %span= task.status
+          - else
+            = button_to "#{task.status}", subtask_status_update_path(subtask_id: task.id, task_id: @task_id)
+        %td
+          %span= user.user_name if user.present?
+        %td
+          = button_to '削除する', subtask_delete_path(subtask_id: task.id, task_id: @task_id)

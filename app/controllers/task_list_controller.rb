@@ -2,13 +2,15 @@ class TaskListController < ApplicationController
 	before_action :set_users
 
 	def show
-		@tasks = TaskListRepository.new.find_active_tasks
+		@tasks = TaskRepository.new.find
 	end
 
 	def show_subtask
-		@task_name = Task.find(params[:id]).task_name
+		task = Task.find(params[:id])
+		@task_name = task.task_name
+		@task_status = task.status
 		@task_id = params[:id]
-		@subtasks = TaskListRepository.new.find_active_subtasks(params[:id])
+		@subtasks = SubtaskRepository.new.find_by_task_id(params[:id])
 	end
 
 	def set_users
